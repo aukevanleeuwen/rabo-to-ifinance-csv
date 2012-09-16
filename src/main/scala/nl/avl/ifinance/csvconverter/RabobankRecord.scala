@@ -13,19 +13,19 @@ case class RabobankRecord(
 	targetTitle: String,
 	transactionDate: String,
 	code: String,
-	other1: String,
-	description1: String,
-	description2: String,
-	description3: String,
-	description4: String,
-	other2: String,
-	other3: String	
+	other1: Option[String], // Unsure what this field is for
+	description1: Option[String],
+	description2: Option[String],
+	description3: Option[String],
+	description4: Option[String],
+	other2: Option[String], // Unsure what this field is for
+	other3: Option[String] // Unsure what this field is for	
 )
 
 object RabobankRecord {
     private lazy val log = LoggerFactory.getLogger(getClass)
 
-    def fromCsvRecord(data: Array[String]): Option[RabobankRecord] = {
+    def fromCsvRecord(data: List[String]): Option[RabobankRecord] = {
         try {
             val entry = RabobankRecord(
                 accountNumber = data(0),
@@ -37,13 +37,13 @@ object RabobankRecord {
                 targetTitle = data(6),
                 transactionDate = data(7),
                 code = data(8),
-                other1 = data(9),
-                description1 = data(10),
-                description2 = data(11),
-                description3 = data(12),
-                description4 = data(13),
-                other2 = data(14),
-                other3 = data(15)
+                other1 = Option(data(9)),
+                description1 = Option(data(10)),
+                description2 = Option(data(11)),
+                description3 = Option(data(12)),
+                description4 = Option(data(13)),
+                other2 = Option(data(14)),
+                other3 = Option(data(15))
             )
             Some(entry)
         } catch {

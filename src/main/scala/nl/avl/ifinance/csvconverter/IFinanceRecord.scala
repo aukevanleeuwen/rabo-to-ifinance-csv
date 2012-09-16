@@ -9,8 +9,8 @@ case class IFinanceRecord(
 
 object IFinanceRecord {
 
-    def toCsvRecord(iFinanceRecord: IFinanceRecord): Array[String] = {
-        Array(
+    def toCsvRecord(iFinanceRecord: IFinanceRecord): List[String] = {
+        List(
             iFinanceRecord.date,
             iFinanceRecord.amount.toString,
             iFinanceRecord.beneficiary,

@@ -30,7 +30,7 @@ class CsvRecordConverterTest extends FlatSpec with ShouldMatchers {
 
         new CsvRecordConverter(reader, writer).convert
 
-        writer.toString.trim should equal(""""20110501","-348.14","987654321","AH Kudelstaart","some<,weird ""quote"""")
+        writer.toString.trim should equal("""20110501,-348.14,987654321,AH Kudelstaart,"some<,weird ""quote"""")
     }
 
     it should "output multiple records correctly" in {
@@ -39,15 +39,15 @@ class CsvRecordConverterTest extends FlatSpec with ShouldMatchers {
             |"2","EUR",20110502,"C",300.00,"4","Transaction title2",20110503,"ba","","description2","","","","",""
             |"unparseable"
             |
-            |above is empty""".trim
+            |above is empty""".stripMargin.trim
         val reader = new StringReader(input)
         val writer = new StringWriter()
 
         new CsvRecordConverter(reader, writer).convert
 
         writer.toString.trim should equal("""
-                |"20110501","-348.14","3","Transaction title1","description1"
-                |"20110502","300.00","4","Transaction title2","description2"
+                |20110501,-348.14,3,Transaction title1,description1
+                |20110502,300.00,4,Transaction title2,description2
                 |""".stripMargin.trim)
 
     }
@@ -58,7 +58,7 @@ class CsvRecordConverterTest extends FlatSpec with ShouldMatchers {
 
         new CsvRecordConverter(reader, writer).convert
 
-        writer.toString.trim should equal(""""20110501","-348.14","987654321","AH Kudelstaart","Pin-transactie..."""")
+        writer.toString.trim should equal("""20110501,-348.14,987654321,AH Kudelstaart,Pin-transactie...""")
     }
 
     it should "give concatenate the different 'description' fields" in {
@@ -67,10 +67,10 @@ class CsvRecordConverterTest extends FlatSpec with ShouldMatchers {
 
         new CsvRecordConverter(reader, writer).convert
 
-        writer.toString.trim should equal(""""20110501","-348.14","987654321","AH Kudelstaart","desc1
+        writer.toString.trim should equal("""20110501,-348.14,987654321,AH Kudelstaart,"desc1
                 |desc2
                 |desc3
-                |desc4"""".stripMargin)
+                |desc4"""".stripMargin.trim)
     }
 
     it should "give concatenate the different 'description' fields, but trim the newlines" in {
@@ -79,7 +79,7 @@ class CsvRecordConverterTest extends FlatSpec with ShouldMatchers {
 
         new CsvRecordConverter(reader, writer).convert
 
-        writer.toString.trim should equal(""""20110501","-348.14","987654321","AH Kudelstaart","desc2"""")
+        writer.toString.trim should equal("""20110501,-348.14,987654321,AH Kudelstaart,desc2""")
     }
 
     it should "give concatenate the different 'description' fields, but enclosing newlines shouldn't be trimmed" in {
@@ -88,10 +88,26 @@ class CsvRecordConverterTest extends FlatSpec with ShouldMatchers {
 
         new CsvRecordConverter(reader, writer).convert
 
-        writer.toString.trim should equal(""""20110501","-348.14","987654321","AH Kudelstaart","desc1
+        val x = """20110501,-348.14,987654321,AH Kudelstaart,"desc1
                 |
                 |
-                |desc4"""".stripMargin)
+                |desc4"""".stripMargin.trim
+                
+        println("expected: " + x)
+        
+        writer.toString.trim should equal("""20110501,-348.14,987654321,AH Kudelstaart,"desc1
+                |
+                |
+                |desc4"""".stripMargin.trim)
+    }
+    
+    it should "not output any quotes when outputting the empty string" in {
+        val reader = new StringReader(""""0123456789","EUR",20110501,"D",348.14,"987654321","AH Kudelstaart",20110502,"ba","","","","","","",""""")
+        val writer = new StringWriter()
+
+        new CsvRecordConverter(reader, writer).convert
+
+        writer.toString.trim should equal("20110501,-348.14,987654321,AH Kudelstaart,")
     }
 
 }

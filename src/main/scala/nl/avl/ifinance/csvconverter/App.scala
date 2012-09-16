@@ -1,7 +1,6 @@
 package nl.avl.ifinance.csvconverter
 
 import java.io.FileReader
-import au.com.bytecode.opencsv.CSVReader
 import java.io.FileWriter
 
 /**
