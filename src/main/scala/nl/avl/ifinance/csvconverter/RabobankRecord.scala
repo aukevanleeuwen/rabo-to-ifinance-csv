@@ -48,7 +48,7 @@ object RabobankRecord {
             Some(entry)
         } catch {
             case e => {
-                log.error("Unable to parse data into a RabobankEntry: " + Option(data).map(_.toList), e)
+                log.warn("Unable to parse data into a RabobankEntry: " + Option(data).map(_.toList), e)
                 None
             }
         }
