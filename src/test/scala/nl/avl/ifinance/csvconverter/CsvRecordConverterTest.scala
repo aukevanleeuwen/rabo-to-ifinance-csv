@@ -93,8 +93,6 @@ class CsvRecordConverterTest extends FlatSpec with ShouldMatchers {
                 |
                 |desc4"""".stripMargin.trim
                 
-        println("expected: " + x)
-        
         writer.toString.trim should equal("""20110501,-348.14,987654321,AH Kudelstaart,"desc1
                 |
                 |
